@@ -4034,6 +4034,78 @@ var useMatchBreakpoints = function () {
     }, [setState]);
     return __assign(__assign({}, state), { isMobile: state.isXs || state.isSm, isTablet: state.isMd || state.isLg, isDesktop: state.isXl || state.isXxl });
 };
+//bottom drawer
+
+var MountAnimation = keyframes(templateObject_1$Yy || (templateObject_1$Yy = __makeTemplateObject(["\n    0% {\n      bottom: -80vh;\n    }\n    100% {\n      bottom: 0vh;\n    }\n  "], ["\n    0% {\n      bottom: -80vh;\n    }\n    100% {\n      bottom: 0vh;\n    }\n  "])));
+var UnmountAnimation = keyframes(templateObject_2$uu || (templateObject_2$uu = __makeTemplateObject(["\n    0% {\n      bottom: 0vh;\n    }\n    100% {\n      bottom: -80vh;\n    }\n  "], ["\n    0% {\n      bottom: 0vh;\n    }\n    100% {\n      bottom: -80vh;\n    }\n  "])));
+var DrawerContainer = styled.div(templateObject_4$b || (templateObject_4$b = __makeTemplateObject(["\n  width: 100%;\n  height: 80vh;\n  background-color: ", ";\n  border-top-left-radius: 32px;\n  border-top-right-radius: 32px;\n  position: fixed;\n  animation: ", " 350ms ease forwards;\n  padding-bottom: env(safe-area-inset-bottom);\n  html[data-useragent*=\"TokenPocket_iOS\"] & {\n    padding-bottom: 45px;\n  }\n  z-index: 21;\n  ", "\n"], ["\n  width: 100%;\n  height: 80vh;\n  background-color: ", ";\n  border-top-left-radius: 32px;\n  border-top-right-radius: 32px;\n  position: fixed;\n  animation: ", " 350ms ease forwards;\n  padding-bottom: env(safe-area-inset-bottom);\n  html[data-useragent*=\"TokenPocket_iOS\"] & {\n    padding-bottom: 45px;\n  }\n  z-index: 21;\n  ",
+    "\n"])), function (_a) {
+    var theme = _a.theme;
+    return theme.colors.backgroundAlt;
+}, MountAnimation, function (_a) {
+    var isUnmounting = _a.isUnmounting;
+    return isUnmounting && css(templateObject_3$ff || (templateObject_3$ff = __makeTemplateObject(["\n      animation: ", " 350ms ease forwards;\n    "], ["\n      animation: ", " 350ms ease forwards;\n    "])), UnmountAnimation);
+});
+var templateObject_1$Yy, templateObject_2$uu, templateObject_3$ff, templateObject_4$b;
+
+var getPortalRoot = function () { var _a; return typeof window !== "undefined" && ((_a = document.getElementById("portal-root")) !== null && _a !== void 0 ? _a : document.body); };
+var useDelayedUnmount = function (isMounted, delayTime) {
+    var _a = useState(false), shouldRender = _a[0], setShouldRender = _a[1];
+    useEffect(function () {
+        var timeoutId;
+        if (isMounted && !shouldRender) {
+            setShouldRender(true);
+        }
+        else if (!isMounted && shouldRender) {
+            timeoutId = setTimeout(function () { return setShouldRender(false); }, delayTime);
+        }
+        return function () { return clearTimeout(timeoutId); };
+    }, [isMounted, delayTime, shouldRender]);
+    return shouldRender;
+};
+var useOnClickOutside = function (ref, handler) {
+    useEffect(function () {
+        var listener = function (event) {
+            // Do nothing if clicking ref's element or descendent elements
+            if (!ref.current || ref.current.contains(event.target)) {
+                return;
+            }
+            handler(event);
+        };
+        document.addEventListener("mousedown", listener);
+        document.addEventListener("touchstart", listener);
+        return function () {
+            document.removeEventListener("mousedown", listener);
+            document.removeEventListener("touchstart", listener);
+        };
+    }, 
+    // It's worth noting that because passed in handler is a new ...
+    // ... function on every render that will cause this effect ...
+    // ... callback/cleanup to run every render. It's not a big deal ...
+    // ... but to optimize you can wrap handler in useCallback before ...
+    // ... passing it into this hook.
+    [ref, handler]);
+};
+var BottomDrawer = function (_a) {
+    var content = _a.content, isOpen = _a.isOpen, setIsOpen = _a.setIsOpen;
+    var ref = useRef(null);
+    var shouldRender = useDelayedUnmount(isOpen, 350);
+    var isMobile = useMatchBreakpoints().isMobile;
+    useOnClickOutside(ref, function () { return setIsOpen(false); });
+    if (!shouldRender || !isMobile) {
+        return null;
+    }
+    var portal = getPortalRoot();
+    return (React__default.createElement(React__default.Fragment, null, portal
+        ? createPortal(React__default.createElement(React__default.Fragment, null,
+            React__default.createElement(Overlay, null),
+            React__default.createElement(DrawerContainer, { ref: ref, isUnmounting: !isOpen },
+                React__default.createElement(Box, { position: "absolute", right: "16px", top: "0" },
+                    React__default.createElement(IconButton, { variant: "text", onClick: function () { return setIsOpen(false); } },
+                        React__default.createElement(Icon$1N, null))),
+                content)), portal)
+        : null));
+};
 
 var defaultParticleOptions = {
     size: 30,
@@ -5370,4 +5442,4 @@ var ResetCSS = createGlobalStyle(templateObject_1 || (templateObject_1 = __makeT
 });
 var templateObject_1;
 
-export { Icon$29 as AccountFilledIcon, Icon$2a as AccountIcon, Icon$28 as AddIcon, Alert, Icon$27 as ArrowBackIcon, Icon$26 as ArrowDownIcon, Icon$25 as ArrowDropDownIcon, Icon$24 as ArrowDropUpIcon, Icon$23 as ArrowFirstIcon, Icon$22 as ArrowForwardIcon, Icon$21 as ArrowLastIcon, Icon$20 as ArrowUpIcon, Icon$1$ as AutoRenewIcon, BackgroundImage, BalanceInput, GridLayout$1 as BaseLayout, BaseMenu, Icon$1Z as BinanceChainIcon, Icon$1_ as BinanceIcon, Icon$2c as BlockIcon, Icon$1Y as BnbUsdtPairTokenIcon, Box, Breadcrumbs, Icon$1X as BscScanIcon, Icon$1W as BunnyCardsIcon, Icon$1V as BunnyPlaceholderIcon, Button, ButtonMenu$1 as ButtonMenu, ButtonMenuItem, CakePrice$1 as CakePrice, Icon$1R as CalculateIcon, Icon$1U as CameraIcon, Card, CardBody, CardFooter, CardHeader, CardRibbon, Icon$1S as CardViewIcon, Icon$1T as Cards, GridLayout as CardsLayout, Icon$1P as ChartIcon, Checkbox, Icon$1N as CheckmarkCircleFillIcon, Icon$2e as CheckmarkCircleIcon, Icon$1O as CheckmarkIcon, Icon$1M as ChevronDownIcon, Icon$1L as ChevronLeftIcon, Icon$1K as ChevronRightIcon, Icon$1J as ChevronUpIcon, Icon$1Q as CircleOutlineIcon, ClickableElementContainer, Icon$1I as CloseIcon, Icon$1H as CogIcon, Icon$1G as Coin98Icon, Icon$1E as CommunityFilledIcon, Icon$1F as CommunityIcon, ConnectorNames, Icon$1D as CopyIcon, Icon$1C as CrownIcon, Icon$1B as CurrencyIcon, Dropdown, DropdownMenuItemType, Icon$5 as EarnFillIcon, Icon$1z as EarnFilledIcon, Icon$1A as EarnIcon, Icon$1y as EllipsisIcon, Icon$2d as ErrorIcon, Icon$2 as ExpandIcon, ExpandableButton, ExpandableLabel, FallingBunnies, Icon$h as FarmIcon, Flex, Icon$1w as GithubIcon, Grid, Icon$g as GroupsIcon, Icon$e as HamburgerCloseIcon, Icon$f as HamburgerIcon, Heading, Icon$1v as HelpIcon, Icon$1u as HistoryIcon, Icon$d as HomeIcon, IconButton, Icon$c as IfoIcon, Image, Icon$2b as InfoIcon, InlineMenu, InlineMenuContainer, Input$1 as Input, InputGroup, Icon$1x as InstagramIcon, Icon$1s as LanguageCurrencyIcon, Icon$1t as LanguageIcon, Icon$1r as LaurelLeftIcon, Icon$1q as LaurelRightIcon, Link, LinkExternal, Icon$1p as ListViewIcon, Icon$1o as LoginIcon, Icon$1n as LogoIcon, Icon$1m as LogoRoundIcon, LogoWithTextIcon, Icon$1k as LogoutIcon, Icon$1l as MathWalletIcon, Icon$1j as MedalBronzeIcon, Icon$1i as MedalGoldIcon, Icon$1h as MedalPurpleIcon, Icon$1g as MedalSilverIcon, Icon$1f as MedalTealIcon, Menu$1 as Menu, Message, Icon$1e as MetamaskIcon, Icon$1d as MinusIcon, Modal, ModalBackButton, ModalBody, ModalCloseButton, ModalContainer, ModalHeader, ModalProvider, ModalTitle, Icon$b as MoonIcon, Icon$1c as MoreHorizontalIcon, Icon$a as MoreIcon, Icon$1b as MoreVerticalIcon, Icon$9 as NftFillIcon, Icon$19 as NftFilledIcon, Icon$1a as NftIcon, Icon$18 as NoProfileAvatarIcon, NotificationDot, Icon$17 as OpenNewIcon, Overlay, Icon$14 as PancakeRoundIcon, PancakeToggle, Icon$16 as PancakesIcon, Icon$15 as PencilIcon, Icon$12 as PlayCircleOutlineIcon, Icon$13 as PocketWatchIcon, Icon$8 as PoolIcon, Icon$11 as PredictionsIcon, Icon$X as PresentCheckIcon, Icon$V as PresentNoneIcon, Icon$W as PresentWonIcon, Icon$10 as PrizeIcon, ProfileAvatar, Progress, Icon$Y as ProgressBunny, Icon$$ as ProposalIcon, Radio, Icon$U as RedditIcon, Icon$T as RefreshIcon, Icon$_ as RemoveIcon, ResetCSS, Icon$R as ResourcesFilledIcon, Icon$S as ResourcesIcon, Icon$Q as SafePalIcon, Icon$P as SearchIcon, Icon$O as SellIcon, Icon$N as ShareIcon, Icon$1 as ShrinkIcon, Skeleton, Slider, Icon$M as SmallDotIcon, Spinner, Icon$L as StarFillIcon, Icon$K as StarLineIcon, Step, Stepper, SubMenu, SubMenuContainer, SubMenuItem, SubMenuItems, Icon$7 as SunIcon, Svg, Icon$I as SwapFillIcon, Icon$J as SwapIcon, Icon$H as SwapVertIcon, Icon$G as SyncAltIcon, Tab, ButtonMenu as TabMenu, Table, Tag, Td, Icon$6 as TeamBattleIcon, Icon$F as TeamPlayerIcon, Icon$E as TelegramIcon, Icon$D as TestnetIcon, Text, Textfield as TextField, Th, ThemeSwitcher$1 as ThemeSwitcher, Icon$C as Ticket, Icon$B as TicketFillIcon, Icon$C as TicketIcon, Icon$A as TicketRound, Timeline, Icon$z as TimerIcon, Toggle, TokenImage, TokenPairImage, Icon$y as TokenPocketIcon, TooltipText, Icon$w as TradeFilledIcon, Icon$x as TradeIcon, Icon$3 as TrophyFillIcon, Icon$v as TrophyGoldIcon, Icon$4 as TrophyIcon, Icon$u as TrustWalletIcon, Icon$s as TuneIcon, Icon$t as TwitterIcon, UserMenu, UserMenuDivider, UserMenuItem, Icon$Z as VerifiedIcon, Icon$r as VisibilityOff, Icon$q as VisibilityOn, Icon$p as VolumeOffIcon, Icon$o as VolumeUpIcon, Icon$n as VoteIcon, Icon$i as WaitIcon, Icon$l as WalletConnectIcon, Icon$j as WalletFilledIcon, Icon$k as WalletIcon, Icon$m as WarningIcon, variants$5 as alertVariants, byTextAscending, byTextDescending, connectorLocalStorageKey, darkTheme as dark, darkColors, lightTheme as light, lightColors, makeRender, links as menuConfig, status as menuStatus, useKonamiCheatCode, useMatchBreakpoints, useModal, useParticleBurst, useTable, useTooltip, useWalletModal };
+export { Icon$29 as AccountFilledIcon, Icon$2a as AccountIcon, Icon$28 as AddIcon, Alert, Icon$27 as ArrowBackIcon, Icon$26 as ArrowDownIcon, Icon$25 as ArrowDropDownIcon, Icon$24 as ArrowDropUpIcon, Icon$23 as ArrowFirstIcon, Icon$22 as ArrowForwardIcon, Icon$21 as ArrowLastIcon, Icon$20 as ArrowUpIcon, Icon$1$ as AutoRenewIcon, BackgroundImage, BalanceInput, GridLayout$1 as BaseLayout, BaseMenu, Icon$1Z as BinanceChainIcon, Icon$1_ as BinanceIcon, Icon$2c as BlockIcon, Icon$1Y as BnbUsdtPairTokenIcon, Box, Breadcrumbs, Icon$1X as BscScanIcon, Icon$1W as BunnyCardsIcon, Icon$1V as BunnyPlaceholderIcon, Button, ButtonMenu$1 as ButtonMenu, ButtonMenuItem, CakePrice$1 as CakePrice, Icon$1R as CalculateIcon, Icon$1U as CameraIcon, Card, CardBody, CardFooter, CardHeader, CardRibbon, Icon$1S as CardViewIcon, Icon$1T as Cards, GridLayout as CardsLayout, Icon$1P as ChartIcon, Checkbox, Icon$1N as CheckmarkCircleFillIcon, Icon$2e as CheckmarkCircleIcon, Icon$1O as CheckmarkIcon, Icon$1M as ChevronDownIcon, Icon$1L as ChevronLeftIcon, Icon$1K as ChevronRightIcon, Icon$1J as ChevronUpIcon, Icon$1Q as CircleOutlineIcon, ClickableElementContainer, Icon$1I as CloseIcon, Icon$1H as CogIcon, Icon$1G as Coin98Icon, Icon$1E as CommunityFilledIcon, Icon$1F as CommunityIcon, ConnectorNames, Icon$1D as CopyIcon, Icon$1C as CrownIcon, Icon$1B as CurrencyIcon, Dropdown, DropdownMenuItemType, Icon$5 as EarnFillIcon, Icon$1z as EarnFilledIcon, Icon$1A as EarnIcon, Icon$1y as EllipsisIcon, Icon$2d as ErrorIcon, Icon$2 as ExpandIcon, ExpandableButton, ExpandableLabel, FallingBunnies, Icon$h as FarmIcon, Flex, Icon$1w as GithubIcon, Grid, Icon$g as GroupsIcon, Icon$e as HamburgerCloseIcon, Icon$f as HamburgerIcon, Heading, Icon$1v as HelpIcon, Icon$1u as HistoryIcon, Icon$d as HomeIcon, IconButton, Icon$c as IfoIcon, Image, Icon$2b as InfoIcon, InlineMenu, InlineMenuContainer, Input$1 as Input, InputGroup, Icon$1x as InstagramIcon, Icon$1s as LanguageCurrencyIcon, Icon$1t as LanguageIcon, Icon$1r as LaurelLeftIcon, Icon$1q as LaurelRightIcon, Link, LinkExternal, Icon$1p as ListViewIcon, Icon$1o as LoginIcon, Icon$1n as LogoIcon, Icon$1m as LogoRoundIcon, LogoWithTextIcon, Icon$1k as LogoutIcon, Icon$1l as MathWalletIcon, Icon$1j as MedalBronzeIcon, Icon$1i as MedalGoldIcon, Icon$1h as MedalPurpleIcon, Icon$1g as MedalSilverIcon, Icon$1f as MedalTealIcon, Menu$1 as Menu, Message, Icon$1e as MetamaskIcon, Icon$1d as MinusIcon, Modal, ModalBackButton, ModalBody, ModalCloseButton, ModalContainer, ModalHeader, ModalProvider, ModalTitle, Icon$b as MoonIcon, Icon$1c as MoreHorizontalIcon, Icon$a as MoreIcon, Icon$1b as MoreVerticalIcon, Icon$9 as NftFillIcon, Icon$19 as NftFilledIcon, Icon$1a as NftIcon, Icon$18 as NoProfileAvatarIcon, NotificationDot, Icon$17 as OpenNewIcon, Overlay, Icon$14 as PancakeRoundIcon, PancakeToggle, Icon$16 as PancakesIcon, Icon$15 as PencilIcon, Icon$12 as PlayCircleOutlineIcon, Icon$13 as PocketWatchIcon, Icon$8 as PoolIcon, Icon$11 as PredictionsIcon, Icon$X as PresentCheckIcon, Icon$V as PresentNoneIcon, Icon$W as PresentWonIcon, Icon$10 as PrizeIcon, ProfileAvatar, Progress, Icon$Y as ProgressBunny, Icon$$ as ProposalIcon, Radio, Icon$U as RedditIcon, Icon$T as RefreshIcon, Icon$_ as RemoveIcon, ResetCSS, Icon$R as ResourcesFilledIcon, Icon$S as ResourcesIcon, Icon$Q as SafePalIcon, Icon$P as SearchIcon, Icon$O as SellIcon, Icon$N as ShareIcon, Icon$1 as ShrinkIcon, Skeleton, Slider, Icon$M as SmallDotIcon, Spinner, Icon$L as StarFillIcon, Icon$K as StarLineIcon, Step, Stepper, SubMenu, SubMenuContainer, SubMenuItem, SubMenuItems, Icon$7 as SunIcon, Svg, Icon$I as SwapFillIcon, Icon$J as SwapIcon, Icon$H as SwapVertIcon, Icon$G as SyncAltIcon, Tab, ButtonMenu as TabMenu, Table, Tag, Td, Icon$6 as TeamBattleIcon, Icon$F as TeamPlayerIcon, Icon$E as TelegramIcon, Icon$D as TestnetIcon, Text, Textfield as TextField, Th, ThemeSwitcher$1 as ThemeSwitcher, Icon$C as Ticket, Icon$B as TicketFillIcon, Icon$C as TicketIcon, Icon$A as TicketRound, Timeline, Icon$z as TimerIcon, Toggle, TokenImage, TokenPairImage, Icon$y as TokenPocketIcon, TooltipText, Icon$w as TradeFilledIcon, Icon$x as TradeIcon, Icon$3 as TrophyFillIcon, Icon$v as TrophyGoldIcon, Icon$4 as TrophyIcon, Icon$u as TrustWalletIcon, Icon$s as TuneIcon, Icon$t as TwitterIcon, UserMenu, UserMenuDivider, UserMenuItem, Icon$Z as VerifiedIcon, Icon$r as VisibilityOff, Icon$q as VisibilityOn, Icon$p as VolumeOffIcon, Icon$o as VolumeUpIcon, Icon$n as VoteIcon, Icon$i as WaitIcon, Icon$l as WalletConnectIcon, Icon$j as WalletFilledIcon, Icon$k as WalletIcon, Icon$m as WarningIcon, variants$5 as alertVariants, byTextAscending, byTextDescending, connectorLocalStorageKey, darkTheme as dark, darkColors, lightTheme as light, lightColors, makeRender, links as menuConfig, status as menuStatus, useDelayedUnmount, BottomDrawer, useKonamiCheatCode, useMatchBreakpoints, useModal, useOnClickOutside, useParticleBurst, useTable, useTooltip, useWalletModal };
