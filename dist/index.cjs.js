@@ -4069,6 +4069,82 @@ var useMatchBreakpoints = function () {
     return __assign(__assign({}, state), { isMobile: state.isXs || state.isSm, isTablet: state.isMd || state.isLg, isDesktop: state.isXl || state.isXxl });
 };
 
+//bottom drawer
+
+var MountAnimation = styled.keyframes(templateObject_1$Yy || (templateObject_1$Yy = __makeTemplateObject(["\n    0% {\n      bottom: -80vh;\n    }\n    100% {\n      bottom: 0vh;\n    }\n  "], ["\n    0% {\n      bottom: -80vh;\n    }\n    100% {\n      bottom: 0vh;\n    }\n  "])));
+var UnmountAnimation = styled.keyframes(templateObject_2$uu || (templateObject_2$uu = __makeTemplateObject(["\n    0% {\n      bottom: 0vh;\n    }\n    100% {\n      bottom: -80vh;\n    }\n  "], ["\n    0% {\n      bottom: 0vh;\n    }\n    100% {\n      bottom: -80vh;\n    }\n  "])));
+var DrawerContainer = styled__default['default'].div(templateObject_4$b || (templateObject_4$b = __makeTemplateObject(["\n  width: 100%;\n  height: 80vh;\n  background-color: ", ";\n  border-top-left-radius: 32px;\n  border-top-right-radius: 32px;\n  position: fixed;\n  animation: ", " 350ms ease forwards;\n  padding-bottom: env(safe-area-inset-bottom);\n  html[data-useragent*=\"TokenPocket_iOS\"] & {\n    padding-bottom: 45px;\n  }\n  z-index: 21;\n  ", "\n"], ["\n  width: 100%;\n  height: 80vh;\n  background-color: ", ";\n  border-top-left-radius: 32px;\n  border-top-right-radius: 32px;\n  position: fixed;\n  animation: ", " 350ms ease forwards;\n  padding-bottom: env(safe-area-inset-bottom);\n  html[data-useragent*=\"TokenPocket_iOS\"] & {\n    padding-bottom: 45px;\n  }\n  z-index: 21;\n  ",
+    "\n"])), function (_a) {
+    var theme = _a.theme;
+    return theme.colors.backgroundAlt;
+}, MountAnimation, function (_a) {
+    var isUnmounting = _a.isUnmounting;
+    return isUnmounting && styled.css(templateObject_3$ff || (templateObject_3$ff = __makeTemplateObject(["\n      animation: ", " 350ms ease forwards;\n    "], ["\n      animation: ", " 350ms ease forwards;\n    "])), UnmountAnimation);
+});
+var templateObject_1$Yy, templateObject_2$uu, templateObject_3$ff, templateObject_4$b;
+
+var useDelayedUnmount = function (isMounted, delayTime) {
+    var _a = React.useState(false), shouldRender = _a[0], setShouldRender = _a[1];
+    React.useEffect(function () {
+        var timeoutId;
+        if (isMounted && !shouldRender) {
+            setShouldRender(true);
+        }
+        else if (!isMounted && shouldRender) {
+            timeoutId = setTimeout(function () { return setShouldRender(false); }, delayTime);
+        }
+        return function () { return clearTimeout(timeoutId); };
+    }, [isMounted, delayTime, shouldRender]);
+    return shouldRender;
+};
+
+var useOnClickOutside = function (ref, handler) {
+    React.useEffect(function () {
+        var listener = function (event) {
+            // Do nothing if clicking ref's element or descendent elements
+            if (!ref.current || ref.current.contains(event.target)) {
+                return;
+            }
+            handler(event);
+        };
+        document.addEventListener("mousedown", listener);
+        document.addEventListener("touchstart", listener);
+        return function () {
+            document.removeEventListener("mousedown", listener);
+            document.removeEventListener("touchstart", listener);
+        };
+    }, 
+    // It's worth noting that because passed in handler is a new ...
+    // ... function on every render that will cause this effect ...
+    // ... callback/cleanup to run every render. It's not a big deal ...
+    // ... but to optimize you can wrap handler in useCallback before ...
+    // ... passing it into this hook.
+    [ref, handler]);
+};
+var getPortalRoot = function () { var _a; return typeof window !== "undefined" && ((_a = document.getElementById("portal-root")) !== null && _a !== void 0 ? _a : document.body); };
+
+var BottomDrawer = function (_a) {
+    var content = _a.content, isOpen = _a.isOpen, setIsOpen = _a.setIsOpen;
+    var ref = React.useRef(null);
+    var shouldRender = useDelayedUnmount(isOpen, 350);
+    var isMobile = useMatchBreakpoints().isMobile;
+    useOnClickOutside(ref, function () { return setIsOpen(false); });
+    if (!shouldRender || !isMobile) {
+        return null;
+    }
+    var portal = getPortalRoot();
+    return (React__default['default'].createElement(React__default['default'].Fragment, null, portal
+        ? reactDom.createPortal(React__default['default'].createElement(React__default['default'].Fragment, null,
+            React__default['default'].createElement(Overlay, null),
+            React__default['default'].createElement(DrawerContainer, { ref: ref, isUnmounting: !isOpen },
+                React__default['default'].createElement(Box, { position: "absolute", right: "16px", top: "0" },
+                    React__default['default'].createElement(IconButton, { variant: "text", onClick: function () { return setIsOpen(false); } },
+                        React__default['default'].createElement(Icon$1N, null))),
+                content)), portal)
+        : null));
+};
+
+
 var defaultParticleOptions = {
     size: 30,
     distance: 500,
@@ -5425,6 +5501,7 @@ exports.BinanceChainIcon = Icon$1Z;
 exports.BinanceIcon = Icon$1_;
 exports.BlockIcon = Icon$2c;
 exports.BnbUsdtPairTokenIcon = Icon$1Y;
+exports.BottomDrawer = BottomDrawer;
 exports.Box = Box;
 exports.Breadcrumbs = Breadcrumbs;
 exports.BscScanIcon = Icon$1X;
@@ -5638,9 +5715,11 @@ exports.makeRender = makeRender;
 exports.menuConfig = links;
 exports.menuStatus = status;
 exports.useKonamiCheatCode = useKonamiCheatCode;
+exports.useDelayedUnmount = useDelayedUnmount;
 exports.useMatchBreakpoints = useMatchBreakpoints;
 exports.useModal = useModal;
 exports.useParticleBurst = useParticleBurst;
 exports.useTable = useTable;
 exports.useTooltip = useTooltip;
 exports.useWalletModal = useWalletModal;
+exports.useOnClickOutside = useOnClickOutside;
