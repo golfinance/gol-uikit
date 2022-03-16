@@ -2967,9 +2967,15 @@ var RotatingPancakeIcon = styled__default['default'](Icon)(templateObject_3$8 ||
 //   animation: ${float} 6s ease-in-out infinite;
 //   transform: translate3d(0, 0, 0);
 // `;
+var SpinnerIcon = function (props) {
+    return (React__default['default'].createElement(Svg, __assign({ viewBox: "0 0 96 96" }, props),
+        React__default['default'].createElement("image", { width: "96", height: "96", href: "/images/cow/7.png" })));
+};
+var Container$1 = styled__default['default'].div(templateObject_2$6 || (templateObject_2$6 = __makeTemplateObject(["\n  position: relative;\n"], ["\n  position: relative;\n"])));
+var RotatingPancakeIcon = styled__default['default'](SpinnerIcon)(templateObject_3$2 || (templateObject_3$2 = __makeTemplateObject(["\n  position: absolute;\n  top: 0;\n  left: 0;\n  animation: ", " 2s linear infinite;\n  transform: translate3d(0, 0, 0);\n"], ["\n  position: absolute;\n  top: 0;\n  left: 0;\n  animation: ", " 2s linear infinite;\n  transform: translate3d(0, 0, 0);\n"])), rotate$1);
 var Spinner = function (_a) {
     var _b = _a.size, size = _b === void 0 ? 128 : _b;
-    return (React__default['default'].createElement(Container, null,
+    return (React__default['default'].createElement(Container$1, null,
         React__default['default'].createElement(RotatingPancakeIcon, { width: size * 0.5 + "px" })));
 };
 var templateObject_1$u, templateObject_2$k, templateObject_3$8;
