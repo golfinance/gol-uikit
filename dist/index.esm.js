@@ -2927,17 +2927,25 @@ var rotate = keyframes(templateObject_1$u || (templateObject_1$u = __makeTemplat
 // 		transform: translatey(0px);
 // 	}
 // `;
-var Container = styled.div(templateObject_2$k || (templateObject_2$k = __makeTemplateObject(["\n  position: relative;\n"], ["\n  position: relative;\n"])));
-var RotatingPancakeIcon = styled(Icon)(templateObject_3$8 || (templateObject_3$8 = __makeTemplateObject(["\n  position: absolute;\n  top: 0;\n  left: 0;\n  animation: ", " 2s linear infinite;\n  transform: translate3d(0, 0, 0);\n"], ["\n  position: absolute;\n  top: 0;\n  left: 0;\n  animation: ", " 2s linear infinite;\n  transform: translate3d(0, 0, 0);\n"])), rotate);
+// var Container = styled.div(templateObject_2$k || (templateObject_2$k = __makeTemplateObject(["\n  position: relative;\n"], ["\n  position: relative;\n"])));
+// var RotatingPancakeIcon = styled(Icon)(templateObject_3$8 || (templateObject_3$8 = __makeTemplateObject(["\n  position: absolute;\n  top: 0;\n  left: 0;\n  animation: ", " 2s linear infinite;\n  transform: translate3d(0, 0, 0);\n"], ["\n  position: absolute;\n  top: 0;\n  left: 0;\n  animation: ", " 2s linear infinite;\n  transform: translate3d(0, 0, 0);\n"])), rotate);
 // const FloatingPanIcon = styled(PanIcon)`
 //   animation: ${float} 6s ease-in-out infinite;
 //   transform: translate3d(0, 0, 0);
 // `;
+var rotateTmp = keyframes(templateObject_1$r || (templateObject_1$r = __makeTemplateObject(["\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n"], ["\n  from {\n    transform: rotate(0deg);\n  }\n  to {\n    transform: rotate(360deg);\n  }\n"])));
+var SpinnerIcon = function (props) {
+    return (React.createElement(Svg, __assign({ viewBox: "0 0 96 96" }, props),
+        React.createElement("image", { width: "96", height: "96", href: "/images/token_solo.png" })));
+};
+var ContainerTmp = styled.div(templateObject_2$6 || (templateObject_2$6 = __makeTemplateObject(["\n  position: relative;\n"], ["\n  position: relative;\n"])));
+var RotatingPancakeIconTmp = styled(SpinnerIcon)(templateObject_3$2 || (templateObject_3$2 = __makeTemplateObject(["\n  position: absolute;\n  top: 0;\n  left: 0;\n  animation: ", " 2s linear infinite;\n  transform: translate3d(0, 0, 0);\n"], ["\n  position: absolute;\n  top: 0;\n  left: 0;\n  animation: ", " 2s linear infinite;\n  transform: translate3d(0, 0, 0);\n"])), rotateTmp);
 var Spinner = function (_a) {
     var _b = _a.size, size = _b === void 0 ? 128 : _b;
-    return (React__default.createElement(Container, null,
-        React__default.createElement(RotatingPancakeIcon, { width: size * 0.5 + "px" })));
+    return (React__default.createElement(ContainerTmp, null,
+        React__default.createElement(RotatingPancakeIconTmp, { width: size * 0.5 + "px" })));
 };
+
 var templateObject_1$u, templateObject_2$k, templateObject_3$8;
 
 var StepperWrapper = styled.div(templateObject_1$t || (templateObject_1$t = __makeTemplateObject(["\n  display: flex;\n  flex-direction: column;\n  width: fit-content;\n"], ["\n  display: flex;\n  flex-direction: column;\n  width: fit-content;\n"])));
