@@ -4448,7 +4448,7 @@ var StyledBottomNav = styled(Flex)(templateObject_1$c || (templateObject_1$c = _
     var theme = _a.theme;
     return theme.colors.cardBorder;
 });
-var StyledOverlay = styled.div(templateObject_2$8 || (templateObject_2$8 = __makeTemplateObject(["\n  content: \"\";\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: ", ";\n  backdrop-filter: blur(2px);\n"], ["\n  content: \"\";\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: ", ";\n  backdrop-filter: blur(2px);\n"])), function (_a) {
+var StyledOverlay = styled.div(templateObject_2$8 || (templateObject_2$8 = __makeTemplateObject(["\n  content: \"\";\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: ", ";\n"], ["\n  content: \"\";\n  position: fixed;\n  top: 0;\n  bottom: 0;\n  left: 0;\n  right: 0;\n  background-color: ", ";\n"])), function (_a) {
     var theme = _a.theme;
     // return theme.colors.text + "99";
     return "transparent";
